@@ -1,7 +1,7 @@
 # CZ1015 Data Science & AI project
 
-Data Sets from: <br />
-  1) <br />
+<br>Data Sets from: <br />
+  <br>1) <br />
   https://www.kaggle.com/heesoo37/120-years-of-olympic-history-athletes-and-results <br />
   2) <br />
   https://www.kaggle.com/c/whats-cooking <br />
