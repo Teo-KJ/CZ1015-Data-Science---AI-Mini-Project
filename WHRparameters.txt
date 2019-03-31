@@ -1,0 +1,14 @@
+Country name
+Life Ladder
+Log GDP per capita
+Social support
+Healthy life expectancy at birth
+Freedom to make life choices
+Generosity
+Perceptions of corruption
+Positive affect
+Negative affect
+Confidence in national government
+Democratic Quality
+Delivery Quality
+GINI index (World Bank estimate)
