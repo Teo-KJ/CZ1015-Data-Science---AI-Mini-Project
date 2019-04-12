@@ -7,6 +7,7 @@ from dash.dependencies import Input, Output
 
 
 Stocks = pd.read_csv('Data\Stocks\S&P 500 (^GSPC)_2005to2018_daily.csv')
+df = pd.read_csv('https://raw.githubusercontent.com/plotly/datasets/master/Emissions%20Data.csv')
 Stocks['Date'] = pd.to_datetime(Stocks.Date, infer_datetime_format=True)
 
 app = dash.Dash(__name__)
@@ -19,20 +20,39 @@ app.layout = html.Div([
                 style={'textAlign': 'center',
                    'fontSize': 40,
                    'marginTop': 25,
-                   'marginBottom': 0
+                   'marginBottom': 0,
+                    'font-family':'algerian'
     }),
-    html.H2("Agenda: Explore relationship between stock & happiness",
+    html.H3("Agenda: Explore relationship between stock & happiness",
             style={'textAlign': 'center',
                    'fontSize': 25,
                    'marginTop':0,
-                   'marginBottom': 20
+                   'marginBottom': 20,
+                   'font-family':'algerian'
     }),
 ],className='row'),
 
     html.Div([
         html.Div([
-    dcc.Dropdown(
-        id='my-dropdown',
+            html.H5("Stock Price over time",
+            style={'textAlign':'center',
+                'font-family':'algerian'
+            }),
+        ],className='six columns'),
+
+        html.Div([
+        html.H5("Greenhouse Gas Emissions by Continent",
+            style={"textAlign": "center",
+                'font-family':'algerian',
+                'margin-left':'45%'
+            }),
+    ],className='six columns'),
+],className='row'),
+
+    html.Div([
+        html.Div([
+        dcc.Dropdown(
+        id='stock-dropdown',
         options=[
             {'label': 'High', 'value': 'High'},
             {'label': 'Low', 'value': 'Low'},
@@ -46,13 +66,37 @@ app.layout = html.Div([
             "width": "50%",
         }
     ),
-    dcc.Graph(id='my-graph')
-], className='six columns')
-]),
-])
+], className='six columns'),
 
-@app.callback(Output('my-graph', 'figure'),
-              [Input('my-dropdown', 'value')])
+    html.Div([
+        dcc.RangeSlider(
+            id="select-year",
+            min=2008,
+            max=2011,
+            marks={2008: "2008", 2009: "2009", 2010: "2010", 2011: "2011"},
+            value=[2008, 2010],
+
+        )], className='six columns',
+            style={
+        "display": "block",
+        "margin-left": "65%",
+        "width": "35%",
+    }
+    ),
+],className='row'),
+
+    html.Div([
+        html.Div([
+    dcc.Graph(id='stocktime')
+    ],className='six columns'),
+        html.Div([
+    dcc.Graph(id="stockboxplot")
+    ],className='six columns'),
+        ],className='row'),
+    ],className='ten columns offset-by-one')
+
+@app.callback(Output('stocktime', 'figure'),
+              [Input('stock-dropdown', 'value')])
 
 def update_graph(selected_dropdown_value):
     dropdown = {
@@ -107,6 +151,38 @@ x=Stocks["Date"],
     }
     return figure
 
+@app.callback(
+    Output('stockboxplot', 'figure'),
+    [Input('select-year', 'value')])
+def update_figure(selected):
+    dff = df[(df["Year"] >= selected[0]) & (df["Year"] <= selected[1])]
+    traces = []
+    for continent in dff.Continent.unique():
+        traces.append(go.Box(
+            y=dff[dff["Continent"] == continent]["Emission"],
+            name=continent,
+            marker={"size": 4}
+
+        ))
+
+    return {
+
+        "data": traces,
+        "layout": go.Layout(
+            title=f"Emission Levels for {'-'.join(str(i) for i in selected)}",
+            height=400,
+            width=600,
+            xaxis={
+                "showticklabels": False,
+            },
+            yaxis={
+                "title": f"Emissions (gigatonnes of CO2)",
+                "type": "log",
+            },
+
+        )
+
+    }
 
 server = app.server
 
