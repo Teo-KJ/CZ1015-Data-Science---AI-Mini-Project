@@ -13,12 +13,13 @@ Stocks = pd.read_csv('Data\Stocks\S&P 500 (^GSPC)_2005to2018_daily.csv')
 df = pd.read_csv('https://raw.githubusercontent.com/plotly/datasets/master/Emissions%20Data.csv')
 Stocks['Date'] = pd.to_datetime(Stocks.Date, infer_datetime_format=True)
 
-
-image_directory = '/Users/Jiaying/Desktop/'
+image_directory = '/Users/tkjie/Desktop/'
 list_of_images = [os.path.basename(x) for x in glob.glob('{}*.png'.format(image_directory))]
 static_image_route = '/static/'
 
 app = dash.Dash(__name__)
+app.title = 'Cx1015 Mini Project'
+
 # Boostrap CSS.
 app.css.append_css({'external_url': 'https://codepen.io/amyoshino/pen/jzXypZ.css'})
 
@@ -39,11 +40,18 @@ app.layout = html.Div([
                    'font-family':'algerian'
     }),
 ],className='row'),
+    html.Div([
+        dcc.Dropdown(
+        id='image-dropdown',
+        options=[{'label': i[:-4], 'value': i} for i in list_of_images],
+        value=list_of_images[0], style={'margin-left':'20%', 'width':550}#,'padding': 10}
+    ), html.Br(),
+    html.Img(id='image', style={'margin-left':"40%"})]),
 
     html.Div([
         html.Div([
-            html.H5("Stock Price over time",
-            style={'textAlign':'center',
+            html.H5("Stock Price Over Time",
+            style={'textAlign':'center', 'fontSize': 25,
                 'font-family':'algerian',
                 'marginLeft':'3%'
             }),
@@ -53,11 +61,11 @@ app.layout = html.Div([
         html.H5("Greenhouse Gas Emissions by Continent",
             style={"textAlign": "center",
                 'font-family':'algerian',
-                'margin-left':'45%'
+                'margin-left':'10%'
             }),
     ],className='six columns'),
 ],className='row'),
-
+    
     html.Div([
         html.Div([
         dcc.Dropdown(
@@ -72,7 +80,7 @@ app.layout = html.Div([
         style={
             "display": "block",
             "margin-left": "auto",
-            "margin-right": "auto",
+            "margin-right": "45%",
             "width": "50%",
         }
     ),
@@ -89,12 +97,12 @@ app.layout = html.Div([
         )], className='six columns',
             style={
         "display": "block",
-        "margin-left": "65%",
+        "margin-left": "50%",
         "width": "35%",
     }
     ),
 ],className='row'),
-
+    
     html.Div([
         html.Div([
     dcc.Graph(id='stocktime')
@@ -107,14 +115,7 @@ app.layout = html.Div([
     ],className='six columns'),
         ],className='row'),
 
-  html.Div([
-  dcc.Dropdown(
-        id='image-dropdown',
-        options=[{'label': i[:-4], 'value': i} for i in list_of_images],
-        value=list_of_images[0]
-    ),
-    html.Img(id='image')
-]),
+  
     ],className='ten columns offset-by-one')
 
 @app.callback(Output('stocktime', 'figure'),
@@ -203,7 +204,6 @@ def update_figure(selected):
             },
 
         )
-
     }
 
 @app.callback(
