@@ -2,6 +2,9 @@ import dash
 import dash_core_components as dcc
 import dash_html_components as html
 import pandas as pd
+import flask
+import glob
+import os
 import plotly.graph_objs as go
 from dash.dependencies import Input, Output
 
@@ -9,6 +12,11 @@ from dash.dependencies import Input, Output
 Stocks = pd.read_csv('Data\Stocks\S&P 500 (^GSPC)_2005to2018_daily.csv')
 df = pd.read_csv('https://raw.githubusercontent.com/plotly/datasets/master/Emissions%20Data.csv')
 Stocks['Date'] = pd.to_datetime(Stocks.Date, infer_datetime_format=True)
+
+
+image_directory = '/Users/Jiaying/Desktop/'
+list_of_images = [os.path.basename(x) for x in glob.glob('{}*.png'.format(image_directory))]
+static_image_route = '/static/'
 
 app = dash.Dash(__name__)
 # Boostrap CSS.
@@ -36,7 +44,8 @@ app.layout = html.Div([
         html.Div([
             html.H5("Stock Price over time",
             style={'textAlign':'center',
-                'font-family':'algerian'
+                'font-family':'algerian',
+                'marginLeft':'3%'
             }),
         ],className='six columns'),
 
@@ -58,6 +67,7 @@ app.layout = html.Div([
             {'label': 'Low', 'value': 'Low'},
         ],
         multi=True,
+
         value=['High'],
         style={
             "display": "block",
@@ -88,11 +98,23 @@ app.layout = html.Div([
     html.Div([
         html.Div([
     dcc.Graph(id='stocktime')
-    ],className='six columns'),
-        html.Div([
+    ],className='six columns',
+    style={'margin-left':'0%'}),
+
+
+    html.Div([
     dcc.Graph(id="stockboxplot")
     ],className='six columns'),
         ],className='row'),
+
+  html.Div([
+  dcc.Dropdown(
+        id='image-dropdown',
+        options=[{'label': i[:-4], 'value': i} for i in list_of_images],
+        value=list_of_images[0]
+    ),
+    html.Img(id='image')
+]),
     ],className='ten columns offset-by-one')
 
 @app.callback(Output('stocktime', 'figure'),
@@ -110,13 +132,13 @@ def update_graph(selected_dropdown_value):
         if i=="High":
             data = 'High'
             high.append(go.Scatter(
-x=Stocks["Date"],
+                x=Stocks["Date"],
                 y=Stocks[data],
                 mode='lines',
                 opacity=0.7,
                 name=f'{dropdown[i]} Price',
                 textposition='bottom center',
-
+                line=dict(color='#5E0DAC')
         ))
         else:
             low.append(go.Scatter(
@@ -126,6 +148,7 @@ x=Stocks["Date"],
                 opacity=0.6,
                 name=f'{dropdown[i]} Price',
                 textposition='bottom center',
+                line=dict(color='#FF4F00')
              ))
 
     traces = [high, low]
@@ -133,7 +156,6 @@ x=Stocks["Date"],
     figure = {
         'data': data,
         'layout': go.Layout(
-            colorway=["#5E0DAC", '#FF4F00', '#375CB1', '#FF7400', '#FFF400', '#FF0056'],
             height=400,
             width=600,
             title=f"Stock prices for {', '.join(str(dropdown[i]) for i in selected_dropdown_value)} Over Time",
@@ -183,6 +205,22 @@ def update_figure(selected):
         )
 
     }
+
+@app.callback(
+    dash.dependencies.Output('image', 'src'),
+    [dash.dependencies.Input('image-dropdown', 'value')])
+def update_image_src(value):
+    return static_image_route + value
+
+# Add a static image route that serves images from desktop
+# Be *very* careful here - you don't want to serve arbitrary files
+# from your computer or server
+@app.server.route('{}<image_path>.png'.format(static_image_route))
+def serve_image(image_path):
+    image_name = '{}.png'.format(image_path)
+    if image_name not in list_of_images:
+        raise Exception('"{}" is excluded from the allowed static files'.format(image_path))
+    return flask.send_from_directory(image_directory, image_name)
 
 server = app.server
 
