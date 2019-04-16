@@ -8,11 +8,21 @@ import os
 import plotly.graph_objs as go
 from dash.dependencies import Input, Output
 
-
+# Stocks Datasets
 Stocks = pd.read_csv('Data\Stocks\S&P 500 (^GSPC)_2005to2018_daily.csv')
 df = pd.read_csv('https://raw.githubusercontent.com/plotly/datasets/master/Emissions%20Data.csv')
 Stocks['Date'] = pd.to_datetime(Stocks.Date, infer_datetime_format=True)
 
+China_Stocks = pd.read_csv('Data\Stocks\SSE Composite Index (^SSEC)_2006to2017_daily.csv')
+China_Stocks = China_Stocks.dropna()
+# PRC_Resulting_Stocks_Data = stocks_data_2(China_Stocks)
+
+# Import the WHR Dataset
+d1 = pd.read_excel("Data/World Happiness Report/WHR2019.xlsx", sheet_name='Table2.1')
+US_Data =  pd.DataFrame(d1[(d1['Country name'] == "United States")])
+US_Data_LL = list(US_Data['Life Ladder'])
+
+# Others
 image_directory = '/Users/tkjie/Desktop/'
 list_of_images = [os.path.basename(x) for x in glob.glob('{}*.png'.format(image_directory))]
 static_image_route = '/static/'
@@ -40,6 +50,15 @@ app.layout = html.Div([
                    'font-family':'algerian'
     }),
 ],className='row'),
+    
+    html.Div(children='''
+        Over here, we examine the relationship of the stocks and happiness over the course of the period where World Happiness
+        Index had been measured.
+    ''', style={'fontSize':20, 'textAlign': 'center'}),
+
+    html.Div(html.Img(src = 'https://geology.com/world/world-map.gif',
+            style = {'height':'15%', 'width':'30%', 'position':'relative', 'margin-top':20, 'margin-left':'35%'})), html.Br(),
+
     html.Div([
         dcc.Dropdown(
         id='image-dropdown',
@@ -53,15 +72,15 @@ app.layout = html.Div([
             html.H5("Stock Price Over Time",
             style={'textAlign':'center', 'fontSize': 25,
                 'font-family':'algerian',
-                'marginLeft':'3%'
+                'marginRight':'15%'
             }),
         ],className='six columns'),
 
         html.Div([
         html.H5("Greenhouse Gas Emissions by Continent",
-            style={"textAlign": "center",
+            style={"textAlign": "right","fontSize":25,
                 'font-family':'algerian',
-                'margin-left':'10%'
+                'margin-right':'20%'
             }),
     ],className='six columns'),
 ],className='row'),
@@ -80,8 +99,8 @@ app.layout = html.Div([
         style={
             "display": "block",
             "margin-left": "auto",
-            "margin-right": "45%",
-            "width": "50%",
+            "margin-right": "15%",
+            "width": "70%",
         }
     ),
 ], className='six columns'),
@@ -97,7 +116,7 @@ app.layout = html.Div([
         )], className='six columns',
             style={
         "display": "block",
-        "margin-left": "50%",
+        "margin-left": "60%",
         "width": "35%",
     }
     ),
@@ -111,7 +130,7 @@ app.layout = html.Div([
 
 
     html.Div([
-    dcc.Graph(id="stockboxplot")
+    dcc.Graph(id="Greenhouseboxplot")
     ],className='six columns'),
         ],className='row'),
 
@@ -121,11 +140,10 @@ app.layout = html.Div([
 @app.callback(Output('stocktime', 'figure'),
               [Input('stock-dropdown', 'value')])
 
-def update_graph(selected_dropdown_value):
+def update_graph_US(selected_dropdown_value):
     dropdown = {
         "High": "High",
-        "Low": "Low",
-    }
+        "Low": "Low",}
     high = []
     low = []
 
@@ -170,13 +188,13 @@ def update_graph(selected_dropdown_value):
                 "title":"Stock Prices (USD)",
             }
         )
-
     }
     return figure
 
 @app.callback(
-    Output('stockboxplot', 'figure'),
+    Output('Greenhouseboxplot', 'figure'),
     [Input('select-year', 'value')])
+
 def update_figure(selected):
     dff = df[(df["Year"] >= selected[0]) & (df["Year"] <= selected[1])]
     traces = []
@@ -184,12 +202,8 @@ def update_figure(selected):
         traces.append(go.Box(
             y=dff[dff["Continent"] == continent]["Emission"],
             name=continent,
-            marker={"size": 4}
-
-        ))
-
+            marker={"size": 4}))
     return {
-
         "data": traces,
         "layout": go.Layout(
             title=f"Emission Levels for {'-'.join(str(i) for i in selected)}",
@@ -198,17 +212,14 @@ def update_figure(selected):
             xaxis={
                 "showticklabels": False,
             },
-            yaxis={
-                "title": f"Emissions (gigatonnes of CO2)",
-                "type": "log",
-            },
-
+            yaxis={"title": f"Emissions (gigatonnes of CO2)","type": "log",},
         )
     }
 
 @app.callback(
     dash.dependencies.Output('image', 'src'),
     [dash.dependencies.Input('image-dropdown', 'value')])
+
 def update_image_src(value):
     return static_image_route + value
 
