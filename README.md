@@ -1,5 +1,6 @@
 CZ1015 Data Science & AI project
 ================================
+Done by: Wilson Teng, Teo Kai Jie & Chen Jiaying  
 
 
 ## What we want to explore:
@@ -25,13 +26,6 @@ While exponential smoothing methods (Eg. Holt-Winter Exponential Smoothing) and
 RNNs were somehow able to predict the trend, they were unable to produce results
 that had low MSE, possibly due to the model’s inability to learn from long-term
 dependencies.
-
-
-## Done by:
-
-Wilson Teng, Teo Kai Jie & Chen Jiaying  
-
-
 
 ## Workload Distribution:
 
