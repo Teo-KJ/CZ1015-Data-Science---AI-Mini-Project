@@ -37,14 +37,14 @@ Wilson Teng, Teo Kai Jie & Chen Jiaying
 
 1.  Wilson
 
->  <br> **Data Cleaning** <br> **LSTM RNN** **(Long Short-Term Memory Recurrent Neural Network)** <br> **Presentation Flow**
+> **Data Cleaning** <br> **LSTM RNN** **(Long Short-Term Memory Recurrent Neural Network)** <br> **Presentation Flow**
   
 
 2.  Kai Jie
 
->   <br> **Data Cleaning** <br> **Visualisation (Plotly)** <br> **Dash**
+> **Data Cleaning** <br> **Visualisation (Plotly)** <br> **Dash**
 
 
 3.  Jiaying
 
->   <br> **Visualisation (Plotly)** <br> **Dash** <br> **Presentation Flow**
+> **Visualisation (Plotly)** <br> **Dash** <br> **Presentation Flow**
