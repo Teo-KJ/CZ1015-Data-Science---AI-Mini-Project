@@ -9,3 +9,5 @@
   <br>2) Yahoo Finance<br />
   <br>https://finance.yahoo.com/<br />
 
+<br>Our Presentation Slides:<br />
+<br>https://docs.google.com/presentation/d/1x1IOCgFj1N7OclKIUDr1CZTfWvfybY8BrwkYoNanSbM/edit?usp=sharing <br />
