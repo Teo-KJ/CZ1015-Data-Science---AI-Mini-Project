@@ -1,13 +1,56 @@
-# CZ1015 Data Science & AI project
+CZ1015 Data Science & AI project
+================================
 
-<br>Happiness & Stocks<br />
+*What we want to explore:*
 
-<br>Data Sets from: <br />
-  <br>1) World Happiness Report<br />
-  <br>http://worldhappiness.report/ed/2018/ <br />
+**CAN HAPPINESS BE USED FOR THE QUANTITATIVE ANALYSIS OF STOCK PRICES?**
 
-  <br>2) Yahoo Finance<br />
-  <br>https://finance.yahoo.com/<br />
+*Data Sets from:*
 
-<br>Our Presentation Slides:<br />
-<br>https://docs.google.com/presentation/d/1x1IOCgFj1N7OclKIUDr1CZTfWvfybY8BrwkYoNanSbM/edit?usp=sharing <br />
+1.  *World Happiness Report*  
+    <http://worldhappiness.report/ed/2018/>
+
+2.  *Yahoo Finance*  
+    <https://finance.yahoo.com/>
+
+*Our Presentation Slides:*  
+<https://docs.google.com/presentation/d/1x1IOCgFj1N7OclKIUDr1CZTfWvfybY8BrwkYoNanSbM/edit?usp=sharing>
+
+*Conclusion:*
+
+While exponential smoothing methods (Eg. Holt-Winter Exponential Smoothing) and
+RNNs were somehow able to predict the trend, they were unable to produce results
+that had low MSE, possibly due to the model’s inability to learn from long-term
+dependencies.
+
+*Done by:*
+
+Wilson Teng, Teo Kai Jie & Chen Jiaying
+
+*Workload Distribution:*
+
+1.  Wilson
+
+-   **Data Cleaning**
+
+-   **LSTM RNN**
+
+>   **(Long Short-Term Memory Recurrent Neural Network)**
+
+-   **Presentation Flow**
+
+1.  Kai Jie
+
+-   **Data Cleaning**
+
+-   **Visualisation (Plotly)**
+
+-   **Dash**
+
+1.  Jiaying
+
+-   **Visualisation (Plotly)**
+
+-   **Dash**
+
+-   **Presentation Flow**
