@@ -77,7 +77,7 @@ app.layout = html.Div([
         ],className='six columns'),
 
         html.Div([
-        html.H5("Greenhouse Gas Emissions by Continent",
+        html.H5("Stock Prices",
             style={"textAlign": "right","fontSize":25,
                 'font-family':'algerian',
                 'margin-right':'20%'
@@ -206,13 +206,13 @@ def update_figure(selected):
     return {
         "data": traces,
         "layout": go.Layout(
-            title=f"Emission Levels for {'-'.join(str(i) for i in selected)}",
+            title=f"Stock Prices for {'-'.join(str(i) for i in selected)}",
             height=400,
             width=600,
             xaxis={
                 "showticklabels": False,
             },
-            yaxis={"title": f"Emissions (gigatonnes of CO2)","type": "log",},
+            yaxis={"title": f"Stock Prices","type": "log",},
         )
     }
 
