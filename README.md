@@ -1,6 +1,6 @@
 CZ1015 Data Science & AI project
 ================================
-Done by: Wilson Teng[https://github.com/wilsonteng97], Teo Kai Jie[https://github.com/Teo-KJ] & Chen Jiaying[https://github.com/jchen051] 
+Done by: [Wilson Teng](https://github.com/wilsonteng97), [Teo Kai Jie](https://github.com/Teo-KJ) & [Chen Jiaying](https://github.com/jchen051)
 
 
 ## What we want to explore:
